@@ -5,6 +5,10 @@ import androidx.annotation.DimenRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * @param onFullyVisibleItem is being triggered when next/prev viewHolder's visible space was shown
+ * @param  minimumVisibleSpace amount of space of viewHolder to show before triggering the event
+ */
 class AutoPlayingScrollListener(
     private val onFullyVisibleItem: ((position: Int) -> Unit)? = null,
     @DimenRes private val minimumVisibleSpace: Int

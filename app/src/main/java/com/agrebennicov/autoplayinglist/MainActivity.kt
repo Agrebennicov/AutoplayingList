@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             dataSourceFactory
         )
         val progressiveMediaSource = ProgressiveMediaSource.Factory(cachedDataSource)
-        val viewHolderCreator = DefaultViewHolderCreator()
+        val viewHolderCreator = DefaultViewHolderManager()
         val player = ExoPlayerFactory.newSimpleInstance(this)
         val adapter: AutoPlayingRecyclerAdapter<AdapterItem> = AutoPlayingRecyclerAdapter(
             progressiveMediaSource,

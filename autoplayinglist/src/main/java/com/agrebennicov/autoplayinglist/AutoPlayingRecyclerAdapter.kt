@@ -10,9 +10,16 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 
+/**
+ * List adapter that handles Video playback as well
+ * @param viewHolderManager is responsible for viewType handling and creation of viewHolders
+ * @param lifecycle is used to not handle some of lifecycle events manually
+ * @see AutoPlayingViewHolder that is responsible for binding the data
+ * @see AutPlayingVideoViewHolder that handles video playback within the viewHolder
+ */
 class AutoPlayingRecyclerAdapter<T : AutoPlayingViewModel>(
     private val progressiveMediaSource: ProgressiveMediaSource.Factory,
-    private val viewHolderCreator: AutoPlayingViewHolderCreator<T>,
+    private val viewHolderManager: AutoPlayingViewHolderManager<T>,
     private val listeners: Map<String, Any>,
     private val player: ExoPlayer,
     lifecycle: Lifecycle,
@@ -25,14 +32,14 @@ class AutoPlayingRecyclerAdapter<T : AutoPlayingViewModel>(
     private val playableHolders = hashMapOf<Int, AutPlayingVideoViewHolder<T>>()
     private var currentlyPlaying: AutPlayingVideoViewHolder<T>? = null
 
-    override fun getItemViewType(position: Int) = viewHolderCreator.getViewType(getItem(position))
+    override fun getItemViewType(position: Int) = viewHolderManager.getViewType(getItem(position))
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AutoPlayingViewHolder<T> {
-        return viewHolderCreator.createViewHolder(parent, viewType, listeners)
+        return viewHolderManager.createViewHolder(parent, viewType, listeners)
     }
 
     override fun onBindViewHolder(holder: AutoPlayingViewHolder<T>, position: Int) {
-        if (viewHolderCreator.isVideoHolder(holder.itemViewType) && holder is AutPlayingVideoViewHolder) {
+        if (viewHolderManager.isVideoHolder(holder.itemViewType) && holder is AutPlayingVideoViewHolder) {
             playableHolders[position] = holder
         }
         holder.bind(getItem(position))
